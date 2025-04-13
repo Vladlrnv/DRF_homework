@@ -1,17 +1,38 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 from materials.models import Course, Lesson
+from django.contrib.auth.models import BaseUserManager
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("The Email field must be set")
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
-    email = models.EmailField(unique=True, verbose_name='почта', help_text='укажите почту')
-    avatar = models.ImageField(upload_to='users/avatar', blank=True, null=True, verbose_name='аватар')
-    phone_number = models.CharField(max_length=11, blank=True, null=True, verbose_name='номер телефона')
-    city = models.CharField(max_length=50, blank=True, null=True, verbose_name='город')
+    username = None
+    email = models.EmailField(unique=True, verbose_name='Email', )
+    avatar = models.ImageField(upload_to='users/', blank=True, null=True, verbose_name='Аватар', )
+    phone = models.CharField(max_length=11, blank=True, null=True, verbose_name='Номер телефона', )
+    city = models.CharField(max_length=50, blank=True, null=True, verbose_name='Город')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.email
@@ -30,17 +51,19 @@ class Payments(models.Model):
         (TRANSFER, 'Перевод'),
     ]
 
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_payment = models.DateTimeField(auto_now_add=True, verbose_name='Дата платежа')
     paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, blank=True, null=True, verbose_name='оплаченный курс')
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, blank=True, null=True, verbose_name='оплаченный урок')
-    amount_payment = models.IntegerField(verbose_name='Сумма оплаты')
+    amount_payment = models.PositiveIntegerField(verbose_name='Сумма оплаты', blank=True, null=True)
     method_payment = models.CharField(choices=STATUS_CHOICES, default=CASH, verbose_name='Способ оплаты')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments', default=1, verbose_name='Владелец')
+    session_id = models.CharField(max_length=250, blank=True, null=True, verbose_name='ID сессии')
+    link = models.URLField(max_length=400, blank=True, null=True, verbose_name='Ссылка на оплату')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_payments', default=1, verbose_name='Владелец')
+
 
     class Meta:
         verbose_name = 'Платёж'
         verbose_name_plural = 'Платежи'
 
     def __str__(self):
-        return self.method_payment
+        return self.method_payment, self.amount

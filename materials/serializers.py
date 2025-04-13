@@ -1,16 +1,27 @@
 from rest_framework import serializers
 
-from materials.models import Lesson, Course
+from materials.models import Course, Lesson, Subscription
+from materials.validators import LinkValidator
 
 
 class LessonSerializer(serializers.ModelSerializer):
+    # owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    created_at = serializers.CharField(read_only=True)
+    updated_at = serializers.CharField(read_only=True)
+    # owner = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Lesson
         fields = '__all__'
+        validators = [LinkValidator(field='link_to_video')]
 
 
 class CourseSerializer(serializers.ModelSerializer):
+    # owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    created_at = serializers.CharField(read_only=True)
+    updated_at = serializers.CharField(read_only=True)
+    # owner = serializers.IntegerField(read_only=True)
+
     number_lessons = serializers.SerializerMethodField()
     lessons_name = serializers.SerializerMethodField()
     lessons = LessonSerializer(many=True, read_only=True)
@@ -26,10 +37,11 @@ class CourseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CourseDetailSerializer(serializers.ModelSerializer):
-    lessons = LessonSerializer(many=True, read_only=True)
+class SubscriptionSerializer(serializers.ModelSerializer):
+    # read_only=True
+    created_at = serializers.CharField(read_only=True)
+    owner = serializers.IntegerField(read_only=True)
 
     class Meta:
-        model = Course
+        model = Subscription
         fields = '__all__'
-
