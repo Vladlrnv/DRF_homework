@@ -12,11 +12,11 @@ class LinkValidator:
         """ Проверяет, что ссылка соответствует требованию: 'youtube.com' """
         # Регулярное выражение для поиска ссылок
         youtube_pattern = re.compile(r'^(https?://)?(www\.)?youtube\.com/?$')
-        link_to_video = dict(value).get(self.field)
+        link_to_the_video = dict(value).get(self.field)
 
-        if link_to_video is None:
+        if link_to_the_video is None:
             return ''
 
             # Проверка на наличие запрещённых ссылок
-        if not bool(youtube_pattern.match(link_to_video)):
+        if not bool(youtube_pattern.match(link_to_the_video)):
             raise serializers.ValidationError("Сторонняя ссылка. Не соответствует требованиям.")

@@ -21,13 +21,13 @@ def send_course_or_lesson_update_message(title, recipient_list, name):
         if name == 'Урок':
             course_or_lesson = 'уроке'
         if name == 'Курс':
-            course_or_lesson = 'уроке'
+            course_or_lesson = 'курсе'
 
         if len(recipient_list) == 0:
-            recipient_list = ['ilamanova.arina@gmail.com']
+            recipient_list = ['rodilsyaletom@mail.ru']
 
         send_mail(
-            subject=f'В  произошли изменения',
+            subject=f'В {course_or_lesson} произошли изменения',
             message=f'В {course_or_lesson} "{title}" произошли изменения',
             from_email=EMAIL_HOST_USER,
             recipient_list=recipient_list,

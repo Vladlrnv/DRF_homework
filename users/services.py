@@ -10,7 +10,7 @@ def create_stripe_product(product):
     """ Функция создания продукта для оплаты """
     stripe.api_key = settings.API_KEY
     # Создали продукт(курс) для оплаты
-    stripe_product = stripe.Product.create(name=product.name,
+    stripe_product = stripe.Product.create(name=product.title,
                                            active=True,
                                            metadata={
                                                "description": product.description,

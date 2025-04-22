@@ -13,13 +13,14 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
-        validators = [LinkValidator(field='link_to_video')]
+        validators = [LinkValidator(field='link_to_the_video')]
 
 
 class CourseSerializer(serializers.ModelSerializer):
     # owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
     created_at = serializers.CharField(read_only=True)
     updated_at = serializers.CharField(read_only=True)
+    subscription = serializers.SerializerMethodField()
     # owner = serializers.IntegerField(read_only=True)
 
     number_lessons = serializers.SerializerMethodField()
@@ -31,6 +32,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_number_lessons(self, obj):
         return Lesson.objects.filter(course=obj).count()
+
+    def get_subscription(self, obj):
+        return Subscription.objects.filter(course=obj.id)
 
     class Meta:
         model = Course

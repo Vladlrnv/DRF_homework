@@ -24,7 +24,7 @@ class CourseViewSet(viewsets.ModelViewSet):
         """Метод получения разрешений на доступ к эндпоитам в соответствии с запросом."""
 
         if self.action in ['create', 'put']:
-            self.permission_classes = [IsAuthenticated & ModeratorPermission]
+            self.permission_classes = [IsAuthenticated | ModeratorPermission]
         elif self.action in ['list', 'change', 'retrieve']:
             self.permission_classes = [IsAuthenticated & IsOwner | IsAuthenticated & ModeratorPermission]
         elif self.action in ['destroy']:
@@ -42,8 +42,6 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         """Метод вносит изменение в сериализатор редактирования "Курса"."""
-
-        course = serializer.save()
 
         course = serializer.save()
 
@@ -81,7 +79,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         """Метод вносит изменение в сериализатор создания подписки."""
         user = self.request.user
         course = serializer.validated_data['course']  # Получаем курс из валидированных данных
-        subscription = Subscription.objects.filter(owner=user, course=course, is_active=True).exists()
+        subscription = Subscription.objects.filter(user=user, course=course).exists()
 
         # Проверяем, есть ли уже активная подписка на данный курс
         if subscription:
