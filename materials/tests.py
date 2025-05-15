@@ -199,4 +199,3 @@ class SubscriptionTest(APITestCase):
         self.assertEqual(self.subscription.id, 1)
         self.assertEqual(Subscription.objects.count(), 0)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-

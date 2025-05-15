@@ -49,7 +49,7 @@ class Subscription(models.Model):
 
     course = models.ForeignKey(Course, on_delete=models.PROTECT, blank=True, null=True, verbose_name='course')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='owner_subscription',
-                                 default=1, verbose_name='Владелец')
+                             default=1, verbose_name='Владелец')
     created_at = models.DateTimeField(default=timezone.now, verbose_name='Дата начала подписки')
 
     class Meta:
