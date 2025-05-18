@@ -104,11 +104,14 @@ jobs:
         run: ssh-add -L
 
       - name: Run Commands via SSH
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
         run: |
           ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.DEPLOY_DIR }}
           
-            printf 'SECRET_KEY=%s\n' "${{ secrets.SECRET_KEY }}" > .env
+#            echo SECRET_KEY=${{ secrets.SECRET_KEY }} > .env
+#            printf 'SECRET_KEY=%s\n' "${{ secrets.SECRET_KEY }}" > .env
             sudo docker compose down
             sudo docker container prune -f
             sudo docker compose up -d --build
