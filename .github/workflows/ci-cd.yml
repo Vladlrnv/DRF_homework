@@ -65,7 +65,7 @@ jobs:
       - name: Create .env file
         run: |
           touch .env
-          echo '"${{ secrets.SECRET_KEY }}"' | sed "s/\"//g" > .env
+          echo '"${{ secrets.ENV_FILE }}"' | sed "s/\"//g" > .env
 
       - name: Login to Docker Hub
         run: |
@@ -108,9 +108,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
             cd ${{ secrets.DEPLOY_DIR }}
           
-#            printf 'SECRET_KEY=%s\n' "${{ secrets.SECRET_KEY }}" > .env
-            sftp> put ./.env .
-            sudo docker compose down
+#            printf 'SECRET_KEY=%s\n' "${{ secrets.SECRET_KEY }}" >> .env
             sudo docker container prune -f
             sudo docker compose up -d --build
           EOF
