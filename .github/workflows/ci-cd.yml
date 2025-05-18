@@ -102,7 +102,6 @@ jobs:
 
       - name: Check SSH Keys
         run: ssh-add -L
-
       - name: Run Commands via SSH
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
