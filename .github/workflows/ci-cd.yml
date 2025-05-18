@@ -109,6 +109,7 @@ jobs:
             cd ${{ secrets.DEPLOY_DIR }}
           
 #            printf 'SECRET_KEY=%s\n' "${{ secrets.SECRET_KEY }}" >> .env
+            sudo docker compose down
             sudo docker container prune -f
             sudo docker compose up -d --build
           EOF
