@@ -48,7 +48,7 @@ class LessonsTest(APITestCase):
             'owner': self.user.pk,
         }
         response = self.client.post(url, data=data)
-
+        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertTrue(Lesson.objects.all().exists())
 
