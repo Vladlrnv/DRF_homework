@@ -133,11 +133,11 @@ jobs:
             sudo docker system prune -f --volumes
           
             # Обновить образы из Docker Hub
-            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/online-training:latest
-            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/online-training-nginx:latest
-            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/celeri-worker:latest
-            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/celeri-beat:latest
+#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/online-training:latest
+#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/online-training-nginx:latest
+#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/celeri-worker:latest
+#            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/celeri-beat:latest
           
             # Запустить контейнеры
-            sudo docker compose up -d --build
+            sudo docker compose up -d
           EOF
