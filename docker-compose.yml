@@ -41,7 +41,7 @@ services:
       - .env
 
   worker:
-    image: celeri-worker:latest
+    image: vladlrnv/celeri-worker:latest
     command: celery -A config worker -l INFO
     depends_on:
       - web
